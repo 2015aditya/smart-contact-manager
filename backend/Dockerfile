@@ -1,7 +1,7 @@
-# Use official Java + Maven image
+# Java + Maven base image
 FROM maven:3.9.6-eclipse-temurin-17
 
-# Set working directory
+# Work directory
 WORKDIR /app
 
 # Copy pom.xml and download dependencies
@@ -11,8 +11,11 @@ RUN mvn dependency:go-offline
 # Copy source code
 COPY src ./src
 
-# Build the application
+# Build jar
 RUN mvn clean package -DskipTests
 
-# Run the application
-CMD ["java", "-jar", "target/*.jar"]
+# Rename jar to app.jar (IMPORTANT FIX)
+RUN cp target/*.jar app.jar
+
+# Run application
+CMD ["java", "-jar", "app.jar"]
